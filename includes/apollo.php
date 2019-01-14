@@ -17,8 +17,10 @@ if ( ! class_exists( 'Apollo' ) ) {
 
     private function __construct() {
 
-			$action = isset($_GET['apollo_action']) ? sanitize_key($_GET['apollo_action']) : '';
-			$apollo_invoice_id = isset($_GET['apollo_invoice_id']) ?  $_GET['apollo_invoice_id'] : false;
+			// check if user admin
+			if ( !current_user_can('administrator') && !current_user_can('editor') ) {
+				return;
+			}
 
 			$wp_upload_dir = wp_upload_dir();
 
@@ -43,13 +45,23 @@ if ( ! class_exists( 'Apollo' ) ) {
 		public function admin_pdf_callback() {
 			$action = isset($_GET['apollo_action']) ? sanitize_key($_GET['apollo_action']) : '';
 			$order_id = isset($_GET['post']) ? intval( $_GET['post'] ): 0;
-			$type = isset($_GET['apollo_type']) ?  $_GET['apollo_type'] : 'invoice';
-			$apollo_document_id = isset($_GET['apollo_document_id']) ?  $_GET['apollo_document_id'] : false;
-			$apollo_document_number = isset($_GET['apollo_document_number']) ?  $_GET['apollo_document_number'] : false;
+			$type = isset($_GET['apollo_type']) ? sanitize_key($_GET['apollo_type']) : 'invoice';
+			$apollo_document_id = isset($_GET['apollo_document_id']) ? sanitize_key($_GET['apollo_document_id']) : false;
+			$apollo_document_number = isset($_GET['apollo_document_number']) ? sanitize_key($_GET['apollo_document_number']) : false;
 
 			if ($action === 'create') {
+				$nonce = sanitize_key( $_GET['nonce'] );
+				if ( ! wp_verify_nonce( $nonce, $action ) ) {
+					wp_die( 'Invalid request.' );
+				}
 				Apollo_invoice::create($order_id, $type);
+
 			} else if ($action === 'pdf' && $apollo_document_id) {
+
+				$nonce = sanitize_key( $_GET['nonce'] );
+				if ( ! wp_verify_nonce( $nonce, $action ) ) {
+					wp_die( 'Invalid request.' );
+				}
 				Apollo_invoice::viewPdf($apollo_document_id, $apollo_document_number, $type);
 			}
 		}
@@ -70,12 +82,12 @@ if ( ! class_exists( 'Apollo' ) ) {
 			$invoice = Apollo_invoice::getInvoice( $order->ID );
 
 			if ( !$invoice ) {
-				$url = add_query_arg( array(
+				$url = wp_nonce_url(add_query_arg( array(
 					'post' => $order->ID,
 					'action' => 'edit',
 					'apollo_action' => 'create',
 					'apollo_type' => 'invoice'
-			), admin_url( 'post.php' ) );
+			), admin_url( 'post.php' )), 'create', 'nonce' );
 
 			$wc_order = wc_get_order($order->ID);
 
@@ -108,14 +120,14 @@ if ( ! class_exists( 'Apollo' ) ) {
 
 				printf( '<a class="button order-page invoice apollo" target="_blank" href="%1$s" title="View invoice on Apollo page">View invoice</a>', $view_url);
 
-				$download_pdf_url = add_query_arg( array(
+				$download_pdf_url = wp_nonce_url(add_query_arg( array(
 					'post' => $order->ID,
 					'action' => 'edit',
 					'apollo_action' => 'pdf',
 					'apollo_document_id' => $invoice['id'],
 					'apollo_document_number' => $invoice['number'],
 					'apollo_type' => 'invoice'
-				), admin_url( 'post.php' ) );
+				), admin_url( 'post.php' )), 'pdf', 'nonce');
 
 				printf( '<a class="button order-page invoice apollo" target="_blank" href="%1$s" title="View invoice PDF">View PDF</a>', $download_pdf_url);
 
@@ -128,12 +140,12 @@ if ( ! class_exists( 'Apollo' ) ) {
 			$estimate = Apollo_invoice::getEstimate( $order->ID );
 
 			if ( !$estimate ) {
-				$url = add_query_arg( array(
+				$url = wp_nonce_url(add_query_arg( array(
 					'post' => $order->ID,
 					'action' => 'edit',
 					'apollo_action' => 'create',
 					'apollo_type' => 'estimate'
-			), admin_url( 'post.php' ) );
+			), admin_url( 'post.php' )), 'create', 'nonce' );
 
 				printf( '<a class="button order-page invoice apollo" href="%1$s" title="Create estimate.">Create</a>', $url);
 
@@ -161,14 +173,14 @@ if ( ! class_exists( 'Apollo' ) ) {
 
 				printf( '<a class="button order-page invoice apollo" target="_blank" href="%1$s" title="View estimate on Apollo page">View estimate</a>', $view_url);
 
-				$download_pdf_url = add_query_arg( array(
+				$download_pdf_url = wp_nonce_url(add_query_arg( array(
 					'post' => $order->ID,
 					'action' => 'edit',
 					'apollo_action' => 'pdf',
 					'apollo_document_id' => $estimate['id'],
 					'apollo_document_number' => $estimate['number'],
 					'apollo_type' => 'estimate'
-				), admin_url( 'post.php' ) );
+				), admin_url( 'post.php' )), 'pdf', 'nonce' );
 
 				printf( '<a class="button order-page invoice apollo" target="_blank" href="%1$s" title="View estimate PDF">View PDF</a>', $download_pdf_url);
 
