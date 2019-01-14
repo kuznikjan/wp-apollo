@@ -45,7 +45,7 @@ if ( ! class_exists( 'Apollo_invoice' ) ) {
         );
 
         if (floatval($product['total']) < floatval($product['subtotal'])) { // item is discounted
-          $product_data['discount'] = (1 - (floatval($product['total']) / floatval($product['subtotal']))) * 100;
+          $product_data['discount'] = round((1 - (floatval($product['total']) / floatval($product['subtotal']))) * 100);
           $product_data['price'] = floatval($product['subtotal']) / $product['quantity'];
         }
 
