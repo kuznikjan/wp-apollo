@@ -1,8 +1,9 @@
 === Apollo - invoicing for WooCommerce ===
 Contributors: jank404
-Tags:  apollo, invoice, generate, pdf, woocommerce, attachment, email, customer invoice, estimate
-Requires at least: 4.0
-Stable tag: 1.0
+Tags:  apollo, invoice, invoicing, generate, pdf, woocommerce, attachment, email, customer invoice, estimate
+Requires at least: 5.0
+Stable tag: trunk
+Tested up to: 5.0.3
 
 == Description ==
 #### About Apollo
@@ -38,7 +39,7 @@ You can customize your PDF document at Apollo webpage, where you can set PDF log
 You can do that by simply going to [Apollo](https://getapollo.io), find "Account" icon on the bottom of sidebar and click "Customizations" under your organization name.
 
 
-Apollo is using [Space invoices API](url=https://spaceinvoices.com/page/home), so for any additional developer information about extension implementation you can check our [Space invoices API PHP documentation](url=https://docs.spaceinvoices.com/?php).
+Apollo is using [Space invoices API](https://spaceinvoices.com/page/home), so for any additional developer information about extension implementation you can check our [Space invoices API PHP documentation](https://docs.spaceinvoices.com/?php).
 
 #### Support
 
@@ -54,7 +55,7 @@ You can contact us on plugin [support page](https://wordpress.org/support/plugin
 
 == Installation ==
 
-First thing you need for Apollo to work, is sign up on [Apollo sign up page](https://getapollo.io/signup). After you confirmed email, you can find data you need for you settings at extensions tab.
+First thing you need for Apollo to work, is sign up on [Apollo sign up page](https://getapollo.io/app/signup). After you confirmed email, you can find data you need for you settings at extensions tab.
 
 **Before installation make sure you have WooCommerce version 3.0 or higher already installed on your WordPress page.**
 
@@ -71,3 +72,5 @@ To install plugin manually you need to:
 1. Download the plugin file and unzip it
 2. Upload the unzipped folder to your WordPress plugin folder (wp-content/plugins/).
 3. Go to your WordPress admin panel, under "Installed Plugins" you will find Apollo plugin. Click "Activate" and plugin is ready to use.
+
+Make sure you go to extension settings and set "token" and "organization id" in order for extension to work. You can find your data on [Apollo](https://getapollo.io), under Integrations > WooCommerce.
