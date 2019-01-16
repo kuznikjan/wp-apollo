@@ -12,8 +12,8 @@ class Spaceinvoices
     // @var string token to be used for requests.
     public static $accessToken = null;
     // @var string The base URL for the Space invoices API.
-    // public static $apiBaseUrl = 'https://api.spaceinvoices.com/v1';
-    public static $apiBaseUrl = 'https://api-test.spaceinvoices.com/v1';
+    public static $apiBaseUrl = 'https://api.spaceinvoices.com/v1';
+    // public static $apiBaseUrl = 'https://api-test.spaceinvoices.com/v1';
 
 
 
