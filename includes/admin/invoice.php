@@ -31,6 +31,7 @@ if ( ! class_exists( 'Apollo_invoice' ) ) {
 
       foreach ($order->get_items() as $item_id => $item_data) {
         $product = $item_data->get_data();
+        $productData = wc_get_product($item_data->get_product_id());
         $without_tax = floatval($product['total']) / $product['quantity'];
         $tax_amount = floatval($product['total_tax']) / $product['quantity'];
 
@@ -43,6 +44,10 @@ if ( ! class_exists( 'Apollo_invoice' ) ) {
           'price'    => $without_tax,
           '_documentItemTaxes' => array(array('rate' => $tax_percent))
         );
+
+        if($productData->get_sku() != '') {
+          $product_data['SKU'] = $productData->get_sku();
+        }
 
         if (floatval($product['total']) < floatval($product['subtotal'])) { // item is discounted
           $product_data['discount'] = round((1 - (floatval($product['total']) / floatval($product['subtotal']))) * 100);
