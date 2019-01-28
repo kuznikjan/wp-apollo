@@ -3,7 +3,7 @@
  * Plugin Name:       Apollo
  * Plugin URI:        https://wordpress.org/plugins/apollo
  * Description:       Manually or automatically generate invoices and send PDFs as attachments for WooCommerce orders.
- * Version:           1.0
+ * Version:           1.0.1
  * Author:            Studio404
  * Text Domain:       apollo
  * Domain Path:       /languages
@@ -11,7 +11,7 @@
 
 defined( 'ABSPATH' ) or exit;
 
-define( 'APOLLO_VERSION', '1.0' );
+define( 'APOLLO_VERSION', '1.0.1' );
 
 function apollo_load_plugin() {
 
